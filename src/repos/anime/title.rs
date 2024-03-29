@@ -2,16 +2,16 @@ use serde::{Deserialize, Serialize};
 
 #[repr(u8)]
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
-pub enum KannaTitleType {
+pub enum KannaTitleTypes {
     Romaji,
     English,
     Portuguese,
-    Native,
+    Native
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct KannaTitle {
-    pub name: String,
+    pub title: String,
     pub is_main: bool,
-    pub title_type: KannaTitleType,
+    pub title_type: KannaTitleTypes,
 }

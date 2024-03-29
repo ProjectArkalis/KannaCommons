@@ -11,6 +11,10 @@ serde = { version = "1.0.197", features = ["derive"] }
 tonic = "0.11.0"
 prost = "0.12.3"
 anyhow = "1.0.81"
+reqwest = { version = "0.12.2", features = [
+    "json",
+    "rustls-tls",
+], default-features = false }
 
 [build-dependencies]
 tonic-build = "0.11"

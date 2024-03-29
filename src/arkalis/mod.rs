@@ -1,10 +1,13 @@
+use self::arkalis_api::arkalis_core_service_client::ArkalisCoreServiceClient;
 use tonic::{
     service::{interceptor::InterceptedService, Interceptor},
     transport::Channel,
     Request, Status,
 };
 
-use self::arkalis_api::arkalis_core_service_client::ArkalisCoreServiceClient;
+pub mod anime;
+pub mod title;
+pub mod anime_lists;
 
 pub mod arkalis_api {
     tonic::include_proto!("arkalis");
@@ -28,8 +31,13 @@ impl Interceptor for AuthInterceptor {
     }
 }
 
-pub async fn get_arkalis_client(arkalis_url: &str, token: Option<String>) -> anyhow::Result<Arkalis> {
-    let channel = Channel::from_shared(arkalis_url.to_owned())?.connect().await?;
+pub async fn get_arkalis_client(
+    arkalis_url: &str,
+    token: Option<String>,
+) -> anyhow::Result<Arkalis> {
+    let channel = Channel::from_shared(arkalis_url.to_owned())?
+        .connect()
+        .await?;
     let client = ArkalisCoreServiceClient::with_interceptor(channel, AuthInterceptor { token });
     Ok(client)
 }
