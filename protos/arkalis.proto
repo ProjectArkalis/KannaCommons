@@ -1,0 +1,252 @@
+syntax = "proto3";
+package arkalis;
+
+message CreateTokenRequest {
+    string display_name = 1;
+}
+
+message CreateTokenResponse {
+    string token = 1;
+}
+
+message GetUserInfoRequest {}
+
+message GetUserInfoResponse {
+    string id = 1;
+    string display_name = 2;
+    string role = 3;
+    optional string mal_profile = 4;
+    optional string anilist_profile = 5;
+}
+
+enum TitleType {
+    TITLE_TYPE_ROMAJI = 0;
+    TITLE_TYPE_ENGLISH = 1;
+    TITLE_TYPE_PORTUGUESE = 2;
+    TITLE_TYPE_NATIVE = 3;
+}
+
+message Title {
+    string name = 1;
+    TitleType title_type = 2;
+    bool is_main = 3;
+}
+
+enum AnimeList {
+    ANIME_LIST_MY_ANIME_LIST = 0;
+    ANIME_LIST_ANILIST = 1;
+}
+
+message AnimeInAnimeList {
+    AnimeList anime_list = 1;
+    string id_in_list = 2;
+}
+
+message CreateAnimeRequest {
+    repeated Title titles = 1;
+    string synopsis = 2;
+    optional string thumbnail_id = 3;
+    optional string banner_id = 4;
+    bool is_hidden = 5;
+    bool is_nsfw = 6;
+    uint64 genre = 7;
+    int64 release_date = 8;
+    repeated AnimeInAnimeList anime_in_lists = 9;
+}
+
+message CreateAnimeResponse {
+    uint32 id = 1;
+}
+
+message Anime {
+    uint32 id = 1;
+    repeated Title titles = 2;
+    string synopsis = 3;
+    optional string thumbnail_id = 4;
+    optional string banner_id = 5;
+    bool is_hidden = 6;
+    bool is_nsfw = 7;
+    string created_by = 8;
+    int64 created_at = 9;
+    uint64 genre = 10;
+    int64 release_date = 11;
+    repeated AnimeInAnimeList anime_in_lists = 12;
+}
+
+message GetAnimeByIdResponse {
+    Anime anime = 1;
+}
+
+message GetAnimeByIdRequest {
+    uint32 id = 1;
+}
+
+message CreateAdminRequest {
+    string admin_master_key = 1;
+    string display_name = 2;
+}
+
+message CreateAdminResponse {
+    string token = 1;
+}
+
+message SearchAnimeRequest {
+    optional string title = 1;
+    optional string synopsis = 2;
+    optional bool is_nsfw = 3;
+    optional uint64 genre = 4;
+    optional int64 start_release_date = 5;
+    optional int64 end_release_date = 6;
+}
+
+message SearchAnimeResponse {
+    repeated Anime animes = 1;
+}
+
+message EditAnimeRequest {
+    uint32 id = 1;
+    repeated Title titles = 2;
+    string synopsis = 3;
+    optional string thumbnail_id = 4;
+    optional string banner_id = 5;
+    uint64 genre = 6;
+    int64 release_date = 7;
+    repeated AnimeInAnimeList anime_in_lists = 8;
+}
+
+message EditAnimeResponse {}
+
+message AddSeasonRequest {
+    string name = 1;
+    optional string cover_id = 2;
+    uint32  anime_id = 3;
+    uint32 sequence = 4;
+}
+
+message AddSeasonResponse {
+    uint32 id = 1;
+}
+
+message GetLastSeasonSequenceRequest {
+    uint32 anime_id = 1;
+}
+
+message GetLastSeasonSequenceResponse {
+    uint32 last_sequence = 1;
+}
+
+message GetAnimeSeasonsRequest {
+    uint32 anime_id = 1;
+}
+
+message Season {
+    uint32 id = 1;
+    string name = 2;
+    optional string cover_id = 3;
+    uint32 anime_id = 4;
+    uint32 sequence = 5;
+}
+
+message GetAnimeSeasonsResponse {
+    repeated Season seasons = 1;
+}
+
+message EditSeasonRequest {
+    uint32 id = 1;
+    string name = 2;
+    optional string cover_id = 3;
+    uint32 sequence = 4;
+}
+
+message EditSeasonResponse {}
+
+message CreateRecoveryKeyRequest {}
+
+message CreateRecoveryKeyResponse {
+    string recovery_key = 1;
+}
+
+message RecoveryUserRequest {
+    string recovery_key = 1;
+}
+
+message RecoveryUserResponse {
+    string token = 1;
+}
+
+message CreateSourceRequest {
+    string name = 1;
+    uint64 source_type = 2;
+    uint32 priority = 3;
+}
+
+message CreateSourceResponse {
+    uint32 id = 1;
+}
+
+message Sources {
+    uint32 id = 1;
+    string name = 2;
+    uint64 source_type = 3;
+    uint32 priority = 4;
+}
+
+message GetSourcesRequest {
+    optional uint64 source_type = 1;
+}
+
+message GetSourcesResponse {
+    repeated Sources sources = 1;
+}
+
+message EditSourceRequest {
+    uint32 id = 1;
+    string name = 2;
+    uint64 source_type = 3;
+    uint32 priority = 4;
+}
+
+message EditSourceResponse {}
+
+message GetSourceByIdRequest {
+    uint32 id = 1;
+}
+
+message GetSourceByIdResponse {
+    Sources source = 1;
+}
+
+message CreateEpisodeRequest {
+    optional string cover_id = 1;
+    uint32 season_id = 2;
+    uint32 source_id = 3;
+    bool is_nsfw = 4;
+    uint32 sequence = 5;
+}
+
+message CreateEpisodeResponse {
+    string id = 1;
+    string name = 2;
+}
+
+
+service ArkalisCoreService {
+    rpc CreateToken(CreateTokenRequest) returns (CreateTokenResponse);
+    rpc CreateAdmin(CreateAdminRequest) returns (CreateAdminResponse);
+    rpc GetUserInfo(GetUserInfoRequest) returns (GetUserInfoResponse);
+    rpc CreateAnime(CreateAnimeRequest) returns (CreateAnimeResponse);
+    rpc CreateRecoveryKey(CreateRecoveryKeyRequest) returns (CreateRecoveryKeyResponse);
+    rpc RecoveryUser(RecoveryUserRequest) returns (RecoveryUserResponse);
+    rpc GetAnimeById(GetAnimeByIdRequest) returns (GetAnimeByIdResponse);
+    rpc SearchAnime(SearchAnimeRequest) returns (SearchAnimeResponse);
+    rpc EditAnime(EditAnimeRequest) returns (EditAnimeResponse);
+    rpc AddSeason(AddSeasonRequest) returns (AddSeasonResponse);
+    rpc GetLastSeasonSequence(GetLastSeasonSequenceRequest) returns (GetLastSeasonSequenceResponse);
+    rpc GetAnimeSeasons(GetAnimeSeasonsRequest) returns (GetAnimeSeasonsResponse);
+    rpc EditSeason(EditSeasonRequest) returns (EditSeasonResponse);
+    rpc CreateSource(CreateSourceRequest) returns (CreateSourceResponse);
+    rpc GetSources(GetSourcesRequest) returns (GetSourcesResponse);
+    rpc EditSource(EditSourceRequest) returns (EditSourceResponse);
+    rpc GetSourceById(GetSourceByIdRequest) returns (GetSourceByIdResponse);
+    rpc CreateEpisode(CreateEpisodeRequest) returns (CreateEpisodeResponse);
+}
