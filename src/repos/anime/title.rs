@@ -6,7 +6,7 @@ pub enum KannaTitleTypes {
     Romaji,
     English,
     Portuguese,
-    Native
+    Native,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

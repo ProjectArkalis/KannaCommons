@@ -1,13 +1,13 @@
 use serde::{Deserialize, Serialize};
 
-use super::AobaService;
+use super::Aoba;
 
 #[derive(Serialize, Deserialize)]
 struct Image {
     pub url: String,
 }
 
-impl AobaService {
+impl Aoba {
     pub async fn upload(&self, img: &str) -> anyhow::Result<String> {
         let resp = self
             .client
@@ -19,6 +19,6 @@ impl AobaService {
             .await?
             .text()
             .await?;
-        Ok(resp)
+        Ok(self.format(&resp))
     }
 }

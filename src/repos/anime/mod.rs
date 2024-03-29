@@ -1,4 +1,5 @@
 use self::{lists::KannaLists, title::KannaTitle};
+use crate::aoba::Aoba;
 use serde::{Deserialize, Serialize};
 
 pub mod lists;
@@ -18,5 +19,15 @@ pub struct KannaAnime {
 }
 
 impl KannaAnime {
-    
+    pub async fn save_images(&mut self, aoba: &Aoba) -> anyhow::Result<&mut Self> {
+        if let Some(thumb) = &self.thumbnail {
+            self.thumbnail = Some(aoba.upload(thumb).await?);
+        }
+
+        if let Some(banner) = &self.banner {
+            self.banner = Some(aoba.upload(banner).await?);
+        }
+
+        Ok(self)
+    }
 }

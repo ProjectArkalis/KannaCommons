@@ -5,13 +5,13 @@ use reqwest::{
 
 pub mod upload;
 
-pub struct AobaService {
+pub struct Aoba {
     client: Client,
     url: String,
 }
 
-impl AobaService {
-    pub fn start(aoba_url: String, token: Option<&str>) -> anyhow::Result<Self> {
+impl Aoba {
+    pub fn start(aoba_url: &String, token: &Option<String>) -> anyhow::Result<Self> {
         let mut headers = HeaderMap::new();
 
         if let Some(token) = token {
@@ -21,13 +21,19 @@ impl AobaService {
         }
 
         let client = Client::builder().default_headers(headers).build()?;
-        Ok(AobaService {
+        Ok(Aoba {
             client,
-            url: aoba_url,
+            url: aoba_url.to_owned(),
         })
     }
 
     pub fn format(&self, id: &String) -> String {
         format!("{}/images/{}", self.url, id)
     }
+}
+
+pub(crate) fn get_id(url: &Option<String>) -> Option<String> {
+    //realmente, mt complexo
+    url.as_ref()
+        .map(|url| url.split('/').last().unwrap().to_owned())
 }

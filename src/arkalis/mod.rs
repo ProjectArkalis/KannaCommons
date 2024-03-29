@@ -6,14 +6,19 @@ use tonic::{
 };
 
 pub mod anime;
-pub mod title;
 pub mod anime_lists;
+pub mod title;
+pub mod user;
 
 pub mod arkalis_api {
     tonic::include_proto!("arkalis");
 }
 
-pub type Arkalis = ArkalisCoreServiceClient<InterceptedService<Channel, AuthInterceptor>>;
+pub type ArkalisClient = ArkalisCoreServiceClient<InterceptedService<Channel, AuthInterceptor>>;
+pub struct Arkalis {
+    pub client: ArkalisClient,
+    pub url: String,
+}
 
 pub struct AuthInterceptor {
     token: Option<String>,
@@ -31,13 +36,21 @@ impl Interceptor for AuthInterceptor {
     }
 }
 
-pub async fn get_arkalis_client(
-    arkalis_url: &str,
-    token: Option<String>,
-) -> anyhow::Result<Arkalis> {
-    let channel = Channel::from_shared(arkalis_url.to_owned())?
-        .connect()
-        .await?;
-    let client = ArkalisCoreServiceClient::with_interceptor(channel, AuthInterceptor { token });
-    Ok(client)
+impl Arkalis {
+    pub async fn new(arkalis_url: &str, token: &Option<String>) -> anyhow::Result<Arkalis> {
+        let channel = Channel::from_shared(arkalis_url.to_owned())?
+            .connect()
+            .await?;
+        let client = ArkalisCoreServiceClient::with_interceptor(
+            channel,
+            AuthInterceptor {
+                token: token.to_owned(),
+            },
+        );
+
+        Ok(Arkalis {
+            client,
+            url: arkalis_url.to_owned(),
+        })
+    }
 }
