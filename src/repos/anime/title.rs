@@ -15,3 +15,13 @@ pub struct KannaTitle {
     pub is_main: bool,
     pub title_type: KannaTitleTypes,
 }
+
+pub trait GetMain {
+    fn get_main(&self) -> KannaTitle;
+}
+
+impl GetMain for Vec<KannaTitle> {
+    fn get_main(&self) -> KannaTitle {
+        self.iter().find(|x| x.is_main).unwrap().to_owned()
+    }
+}

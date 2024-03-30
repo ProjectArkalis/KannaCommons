@@ -45,7 +45,7 @@ impl AnimeInfos {
             .animes;
         Ok(search.into_iter().map(AnimeInfos::from).collect())
     }
-    
+
     pub async fn from_anime_id(id: u32, arkalis: &mut Arkalis) -> anyhow::Result<Self> {
         let anime = arkalis
             .client
