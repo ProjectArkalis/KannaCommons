@@ -70,6 +70,7 @@ impl AnimeInfos {
                         id: Some(x.id),
                         name: x.name.clone(),
                         thumbnail: x.cover_id.clone(),
+                        episodes: vec![]
                     })
                     .collect(),
             })
@@ -122,7 +123,11 @@ impl AnimeInfos {
                     .await?
                     .into_inner()
                     .id;
-                season.1.id = Some(season_id)
+                season.1.id = Some(season_id);
+
+                for (i, ep) in season.1.episodes.iter_mut().enumerate() {
+                    ep.create_episode(season_id, 1, i as u32, arkalis).await?;
+                }
             }
         }
 
