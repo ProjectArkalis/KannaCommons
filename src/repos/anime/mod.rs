@@ -30,4 +30,15 @@ impl KannaAnime {
 
         Ok(self)
     }
+
+    pub fn fix_image_urls(&mut self, aoba: &Aoba) -> anyhow::Result<&mut Self> {
+        if let Some(thumb) = &self.thumbnail {
+            self.thumbnail = Some(aoba.format(thumb));
+        }
+
+        if let Some(banner) = &self.banner {
+            self.banner = Some(aoba.format(banner));
+        }
+        Ok(self)
+    }
 }
