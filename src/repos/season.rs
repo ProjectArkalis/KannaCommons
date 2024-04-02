@@ -1,4 +1,4 @@
-use super::episode::KannaEpisode;
+use super::source::KannaSource;
 use crate::aoba::Aoba;
 use serde::{Deserialize, Serialize};
 
@@ -7,7 +7,7 @@ pub struct KannaSeason {
     pub id: Option<u32>,
     pub name: String,
     pub thumbnail: Option<String>,
-    pub episodes: Vec<KannaEpisode>,
+    pub sources: Vec<KannaSource>,
 }
 
 impl KannaSeason {
