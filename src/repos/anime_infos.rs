@@ -100,6 +100,10 @@ impl AnimeInfos {
                         sequence: season.0 as u32,
                     })
                     .await?;
+
+                for source in season.1.sources.iter_mut() {
+                    source.save_episodes(season.1.id.unwrap(), arkalis).await?;
+                }
             }
         } else {
             let resp = arkalis
