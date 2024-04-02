@@ -1,5 +1,8 @@
 use super::{episode::KannaEpisode, source_types::SourceType};
-use crate::arkalis::{arkalis_api::CreateSourceRequest, Arkalis};
+use crate::arkalis::{
+    arkalis_api::{CreateSourceRequest, GetSourceByIdRequest},
+    Arkalis,
+};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -12,6 +15,21 @@ pub struct KannaSource {
 }
 
 impl KannaSource {
+    pub async fn from_id(id: u32, arkalis: &mut Arkalis) -> anyhow::Result<Self> {
+        let source = arkalis
+            .client
+            .get_source_by_id(GetSourceByIdRequest { id })
+            .await?
+            .into_inner()
+            .source;
+
+        if let Some(source) = source {
+            Ok(source.into())
+        } else {
+            Err(anyhow::anyhow!("Source não encontrada"))
+        }
+    }
+
     pub async fn save(&mut self, arkalis: &mut Arkalis) -> anyhow::Result<&mut Self> {
         let id = arkalis
             .client
