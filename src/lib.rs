@@ -6,6 +6,7 @@ pub mod aoba;
 pub mod arkalis;
 pub mod repos;
 
+#[derive(Debug)]
 pub struct Clients {
     pub aoba: Result<Aoba, Error>,
     pub arkalis: Result<Arkalis, Error>,
@@ -14,7 +15,7 @@ pub struct Clients {
 impl Clients {
     pub async fn new_clients(
         arkalis_url: &str,
-        aoba_url: &String,
+        aoba_url: &str,
         token: &Option<String>,
     ) -> Clients {
         let arkalis = Arkalis::new(arkalis_url, token).await;

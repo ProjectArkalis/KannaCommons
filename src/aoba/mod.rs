@@ -5,13 +5,14 @@ use reqwest::{
 
 pub mod upload;
 
+#[derive(Debug)]
 pub struct Aoba {
     client: Client,
     url: String,
 }
 
 impl Aoba {
-    pub fn start(aoba_url: &String, token: &Option<String>) -> anyhow::Result<Self> {
+    pub fn start(aoba_url: &str, token: &Option<String>) -> anyhow::Result<Self> {
         let mut headers = HeaderMap::new();
 
         if let Some(token) = token {

@@ -16,6 +16,8 @@ pub mod arkalis_api {
 }
 
 pub type ArkalisClient = ArkalisCoreServiceClient<InterceptedService<Channel, AuthInterceptor>>;
+
+#[derive(Debug)]
 pub struct Arkalis {
     pub client: ArkalisClient,
     pub url: String,
