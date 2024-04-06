@@ -46,6 +46,24 @@ impl AnimeInfos {
         Ok(search.into_iter().map(AnimeInfos::from).collect())
     }
 
+    pub async fn with_seasons(&mut self, arkalis: &mut Arkalis) -> anyhow::Result<&mut Self> {
+        let a = arkalis
+            .client
+            .get_anime_seasons(GetAnimeSeasonsRequest {
+                anime_id: self.arkalis_id.unwrap(),
+            })
+            .await?
+            .into_inner()
+            .seasons;
+
+        self.seasons = a.into_iter().map(KannaSeason::from).collect();
+        for season in self.seasons.iter_mut() {
+            season.with_sources(arkalis).await?;
+        }
+
+        Ok(self)
+    }
+
     pub async fn from_anime_id(id: u32, arkalis: &mut Arkalis) -> anyhow::Result<Self> {
         let anime = arkalis
             .client
@@ -71,6 +89,7 @@ impl AnimeInfos {
                         name: x.name.clone(),
                         thumbnail: x.cover_id.clone(),
                         sources: vec![],
+                        sequence: x.sequence
                     })
                     .collect(),
             })

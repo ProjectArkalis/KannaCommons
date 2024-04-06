@@ -12,6 +12,7 @@ pub struct KannaEpisode {
     pub is_hidden: bool,
     pub is_nsfw: bool,
     pub lbry_url: String,
+    pub lbry_id: Option<String>,
     pub title: Option<String>,
     pub name: Option<String>,
 }

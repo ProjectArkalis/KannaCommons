@@ -50,6 +50,7 @@ impl From<AnimeInfos> for EditAnimeRequest {
             titles: value.anime.titles.into_iter().map(|x| x.into()).collect(),
             banner_id: get_id(&value.anime.banner),
             thumbnail_id: get_id(&value.anime.thumbnail),
+            is_hidden: value.anime.is_hidden
         }
     }
 }

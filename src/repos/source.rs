@@ -1,6 +1,6 @@
 use super::{episode::KannaEpisode, source_types::SourceType};
 use crate::arkalis::{
-    arkalis_api::{CreateSourceRequest, GetSourceByIdRequest},
+    arkalis_api::{CreateSourceRequest, GetEpisodesBySeasonAndSourceRequest, GetSourceByIdRequest},
     Arkalis,
 };
 use serde::{Deserialize, Serialize};
@@ -68,6 +68,26 @@ impl KannaSource {
                     .await?;
             }
         }
+        Ok(self)
+    }
+
+    pub async fn with_episodes(
+        &mut self,
+        season_id: u32,
+        arkalis: &mut Arkalis,
+    ) -> anyhow::Result<&mut Self> {
+        let eps = arkalis
+            .client
+            .get_episodes_by_season_and_source(GetEpisodesBySeasonAndSourceRequest {
+                season_id,
+                source_id: self.id.unwrap(),
+            })
+            .await?
+            .into_inner()
+            .episodes;
+
+        self.episodes = eps.into_iter().map(KannaEpisode::from).collect();
+
         Ok(self)
     }
 }

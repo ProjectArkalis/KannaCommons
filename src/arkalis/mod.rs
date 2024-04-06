@@ -10,6 +10,8 @@ pub mod anime_lists;
 pub mod title;
 pub mod user;
 pub mod source;
+pub mod season;
+pub mod episode;
 
 pub mod arkalis_api {
     tonic::include_proto!("arkalis");
