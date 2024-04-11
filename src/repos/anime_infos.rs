@@ -21,6 +21,32 @@ pub struct AnimeInfos {
 }
 
 impl AnimeInfos {
+    pub fn fix_image_urls(&mut self, aoba: &Aoba) -> &mut Self {
+        if let Some(thumb) = &self.anime.thumbnail {
+            self.anime.thumbnail = Some(aoba.format(thumb));
+        }
+
+        if let Some(banner) = &self.anime.banner {
+            self.anime.banner = Some(aoba.format(banner));
+        }
+
+        for season in self.seasons.iter_mut() {
+            if let Some(thumb) = &season.thumbnail {
+                season.thumbnail = Some(aoba.format(thumb));
+            }
+
+            for source in season.sources.iter_mut() {
+                for ep in source.episodes.iter_mut() {
+                    if let Some(thumb) = &ep.thumbnail {
+                        ep.thumbnail = Some(aoba.format(thumb));
+                    }        
+                }
+            }
+        }
+
+        self
+    }
+
     pub async fn search(
         title: Option<String>,
         synopsis: Option<String>,
