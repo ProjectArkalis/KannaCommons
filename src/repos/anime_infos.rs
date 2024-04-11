@@ -89,7 +89,7 @@ impl AnimeInfos {
                         name: x.name.clone(),
                         thumbnail: x.cover_id.clone(),
                         sources: vec![],
-                        sequence: x.sequence
+                        sequence: x.sequence,
                     })
                     .collect(),
             })

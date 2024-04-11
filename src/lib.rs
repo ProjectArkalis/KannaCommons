@@ -13,11 +13,7 @@ pub struct Clients {
 }
 
 impl Clients {
-    pub async fn new_clients(
-        arkalis_url: &str,
-        aoba_url: &str,
-        token: &Option<String>,
-    ) -> Clients {
+    pub async fn new_clients(arkalis_url: &str, aoba_url: &str, token: &Option<String>) -> Clients {
         let arkalis = Arkalis::new(arkalis_url, token).await;
         let aoba = Aoba::start(aoba_url, token);
 

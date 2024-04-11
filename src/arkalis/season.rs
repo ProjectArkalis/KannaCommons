@@ -9,7 +9,7 @@ impl From<Season> for KannaSeason {
             name: value.name,
             thumbnail: value.cover_id,
             sequence: value.sequence,
-            sources: vec![]
+            sources: vec![],
         }
     }
 }

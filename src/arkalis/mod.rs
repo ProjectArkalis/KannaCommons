@@ -1,7 +1,7 @@
 use self::arkalis_api::arkalis_core_service_client::ArkalisCoreServiceClient;
 use tonic::{
     service::{interceptor::InterceptedService, Interceptor},
-    transport::{Certificate, Channel, ClientTlsConfig},
+    transport::{Channel, ClientTlsConfig},
     Request, Status,
 };
 
