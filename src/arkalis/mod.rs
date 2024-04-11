@@ -1,17 +1,17 @@
 use self::arkalis_api::arkalis_core_service_client::ArkalisCoreServiceClient;
 use tonic::{
     service::{interceptor::InterceptedService, Interceptor},
-    transport::Channel,
+    transport::{Certificate, Channel, ClientTlsConfig},
     Request, Status,
 };
 
 pub mod anime;
 pub mod anime_lists;
+pub mod episode;
+pub mod season;
+pub mod source;
 pub mod title;
 pub mod user;
-pub mod source;
-pub mod season;
-pub mod episode;
 
 pub mod arkalis_api {
     tonic::include_proto!("arkalis");
@@ -44,6 +44,7 @@ impl Interceptor for AuthInterceptor {
 impl Arkalis {
     pub async fn new(arkalis_url: &str, token: &Option<String>) -> anyhow::Result<Arkalis> {
         let channel = Channel::from_shared(arkalis_url.to_owned())?
+            .tls_config(ClientTlsConfig::new())?
             .connect()
             .await?;
         let client = ArkalisCoreServiceClient::with_interceptor(
