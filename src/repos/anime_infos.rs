@@ -21,7 +21,7 @@ pub struct AnimeInfos {
 }
 
 impl AnimeInfos {
-    pub fn fix_image_urls(&mut self, aoba: &Aoba) -> &mut Self {
+    pub fn fix_image_urls(mut self, aoba: &Aoba) -> Self {
         if let Some(thumb) = &self.anime.thumbnail {
             self.anime.thumbnail = Some(aoba.format(thumb));
         }
