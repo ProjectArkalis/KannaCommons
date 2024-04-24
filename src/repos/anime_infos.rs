@@ -72,7 +72,7 @@ impl AnimeInfos {
         Ok(search.into_iter().map(AnimeInfos::from).collect())
     }
 
-    pub async fn with_seasons(&mut self, arkalis: &mut Arkalis) -> anyhow::Result<&mut Self> {
+    pub async fn with_seasons(mut self, arkalis: &mut Arkalis) -> anyhow::Result<Self> {
         let a = arkalis
             .client
             .get_anime_seasons(GetAnimeSeasonsRequest {
