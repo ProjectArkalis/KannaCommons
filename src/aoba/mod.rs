@@ -12,7 +12,7 @@ pub struct Aoba {
 }
 
 impl Aoba {
-    pub fn new(aoba_url: &str, token: &Option<String>) -> anyhow::Result<Self> {
+    pub fn new(aoba_url: &str, token: Option<&str>) -> anyhow::Result<Self> {
         let mut headers = HeaderMap::new();
 
         if let Some(token) = token {

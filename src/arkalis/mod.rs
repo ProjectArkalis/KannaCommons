@@ -34,7 +34,7 @@ impl Interceptor for AuthInterceptor {
 }
 
 impl Arkalis {
-    pub async fn new(arkalis_url: &str, token: &Option<String>) -> anyhow::Result<Arkalis> {
+    pub async fn new(arkalis_url: &str, token: Option<&str>) -> anyhow::Result<Arkalis> {
         let channel = Channel::from_shared(arkalis_url.to_owned())?
             .tls_config(ClientTlsConfig::new())?
             .connect()
@@ -42,7 +42,7 @@ impl Arkalis {
         let client = ArkalisCoreServiceClient::with_interceptor(
             channel,
             AuthInterceptor {
-                token: token.to_owned(),
+                token: token.map(|x| x.to_owned()),
             },
         );
 
