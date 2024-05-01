@@ -4,7 +4,7 @@ use arkalis::Arkalis;
 
 pub mod aoba;
 pub mod arkalis;
-pub mod repos;
+mod traits;
 
 #[derive(Debug)]
 pub struct Clients {
@@ -13,9 +13,9 @@ pub struct Clients {
 }
 
 impl Clients {
-    pub async fn new_clients(arkalis_url: &str, aoba_url: &str, token: &Option<String>) -> Clients {
-        let arkalis = Arkalis::new(arkalis_url, token).await;
-        let aoba = Aoba::start(aoba_url, token);
+    pub async fn new(arkalis_url: &str, aoba_url: &str, token: Option<String>) -> Clients {
+        let arkalis = Arkalis::new(arkalis_url, &token).await;
+        let aoba = Aoba::new(aoba_url, &token);
 
         Clients { arkalis, aoba }
     }
