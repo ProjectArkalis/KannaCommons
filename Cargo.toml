@@ -16,7 +16,7 @@ reqwest = { version = "0.12.4", features = [
     "rustls-tls",
 ], default-features = false }
 clap = { version = "4.5.4", features = ["derive"], optional = true }
-kanna-models = {path = "C:\\Users\\Yummi\\CodigosFodas\\KannaModels"}
+kanna-models = {path = "/home/yummi/CodigosFodas/KannaModels"}
 async-trait = "0.1.80"
 
 [build-dependencies]
