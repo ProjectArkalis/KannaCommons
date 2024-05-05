@@ -1,7 +1,10 @@
 use serde::{Deserialize, Serialize};
 
 use crate::arkalis::{
-    arkalis_api::{CreateEpisodeRequest, GetEpisodeByIdRequest, UpdateEpisodeRequest},
+    arkalis_api::{
+        CreateEpisodeRequest, GetEpisodeByIdRequest, GetEpisodesBySeasonAndSourceRequest,
+        UpdateEpisodeRequest,
+    },
     Arkalis,
 };
 
@@ -18,6 +21,22 @@ pub struct KannaEpisode {
 }
 
 impl KannaEpisode {
+    pub async fn get_episodes(
+        season: u32,
+        source: u32,
+        arkalis: &mut Arkalis,
+    ) -> anyhow::Result<Vec<KannaEpisode>> {
+        let eps = arkalis
+            .client
+            .get_episodes_by_season_and_source(GetEpisodesBySeasonAndSourceRequest {
+                season_id: season,
+                source_id: source,
+            })
+            .await?
+            .into_inner();
+        Ok(eps.episodes.into_iter().map(KannaEpisode::from).collect())
+    }
+
     pub async fn create_episode(
         &mut self,
         season_id: u32,
