@@ -69,6 +69,7 @@ impl KannaSource {
                     .create_episode(season_id, self.id.unwrap(), i as u32, arkalis)
                     .await?;
             }
+            episode.lbry_url = None;
         }
         Ok(self)
     }
