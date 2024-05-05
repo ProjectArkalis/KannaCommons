@@ -272,6 +272,14 @@ message GetSourcesBySeasonIdResponse {
     repeated Sources sources = 1;
 }
 
+message GetEpisodeByIdRequest {
+    string id = 1;
+}
+
+message GetEpisodeByIdResponse {
+    Episode episode = 1;
+}
+
 service ArkalisCoreService {
     rpc CreateToken(CreateTokenRequest) returns (CreateTokenResponse);
     rpc CreateAdmin(CreateAdminRequest) returns (CreateAdminResponse);
@@ -294,4 +302,5 @@ service ArkalisCoreService {
     rpc UpdateEpisode(UpdateEpisodeRequest) returns (UpdateEpisodeResponse);
     rpc GetEpisodesBySeasonAndSource(GetEpisodesBySeasonAndSourceRequest) returns (GetEpisodesBySeasonAndSourceResponse);
     rpc GetSourcesBySeasonId(GetSourcesBySeasonIdRequest) returns (GetSourcesBySeasonIdResponse);
+    rpc GetEpisodeById(GetEpisodeByIdRequest) returns (GetEpisodeByIdResponse);
 }

@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use crate::arkalis::{
-    arkalis_api::{CreateEpisodeRequest, UpdateEpisodeRequest},
+    arkalis_api::{CreateEpisodeRequest, GetEpisodeByIdRequest, UpdateEpisodeRequest},
     Arkalis,
 };
 
@@ -11,9 +11,9 @@ pub struct KannaEpisode {
     pub thumbnail: Option<String>,
     pub is_hidden: bool,
     pub is_nsfw: bool,
-    pub lbry_url: String,
     pub lbry_id: Option<String>,
-    pub title: Option<String>,
+    pub file_url: String,
+    pub lbry_url: Option<String>,
     pub name: Option<String>,
 }
 
@@ -52,13 +52,22 @@ impl KannaEpisode {
         arkalis
             .client
             .update_episode(UpdateEpisodeRequest {
-                id,
+                id: id.clone(),
                 lbry_url: Some(lbry_url),
                 is_hidden: self.is_hidden,
                 cover_id: None,
                 sequence,
             })
             .await?;
+
+        let ep = arkalis
+            .client
+            .get_episode_by_id(GetEpisodeByIdRequest { id })
+            .await?
+            .into_inner()
+            .episode
+            .unwrap();
+        self.file_url = ep.file_name;
         Ok(self)
     }
 }
