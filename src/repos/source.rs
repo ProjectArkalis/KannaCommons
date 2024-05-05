@@ -1,6 +1,9 @@
 use super::{episode::KannaEpisode, source_types::SourceType};
 use crate::arkalis::{
-    arkalis_api::{CreateSourceRequest, GetEpisodesBySeasonAndSourceRequest, GetSourceByIdRequest},
+    arkalis_api::{
+        CreateSourceRequest, GetEpisodesBySeasonAndSourceRequest, GetSourceByIdRequest,
+        GetSourcesBySeasonIdRequest,
+    },
     Arkalis,
 };
 use serde::{Deserialize, Serialize};
@@ -15,6 +18,19 @@ pub struct KannaSource {
 }
 
 impl KannaSource {
+    pub async fn get_seasons_sources(
+        season: u32,
+        arkalis: &mut Arkalis,
+    ) -> anyhow::Result<Vec<KannaSource>> {
+        let sources = arkalis
+            .client
+            .get_sources_by_season_id(GetSourcesBySeasonIdRequest { season_id: season })
+            .await?
+            .into_inner()
+            .sources;
+        Ok(sources.into_iter().map(KannaSource::from).collect())
+    }
+
     pub async fn from_id(id: u32, arkalis: &mut Arkalis) -> anyhow::Result<Self> {
         let source = arkalis
             .client
@@ -60,7 +76,12 @@ impl KannaSource {
         for (i, episode) in self.episodes.iter_mut().enumerate() {
             if let Some(id) = &episode.id {
                 episode
-                    .update_episode(id.to_owned(), episode.lbry_url.to_owned(), i as u32, arkalis)
+                    .update_episode(
+                        id.to_owned(),
+                        episode.lbry_url.to_owned(),
+                        i as u32,
+                        arkalis,
+                    )
                     .await?;
             } else {
                 episode
