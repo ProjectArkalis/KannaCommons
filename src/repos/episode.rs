@@ -45,7 +45,7 @@ impl KannaEpisode {
     pub async fn update_episode(
         &mut self,
         id: String,
-        lbry_url: String,
+        lbry_url: Option<String>,
         sequence: u32,
         arkalis: &mut Arkalis,
     ) -> anyhow::Result<&mut Self> {
@@ -53,7 +53,7 @@ impl KannaEpisode {
             .client
             .update_episode(UpdateEpisodeRequest {
                 id: id.clone(),
-                lbry_url: Some(lbry_url),
+                lbry_url,
                 is_hidden: self.is_hidden,
                 cover_id: None,
                 sequence,

@@ -59,11 +59,9 @@ impl KannaSource {
     ) -> anyhow::Result<&mut Self> {
         for (i, episode) in self.episodes.iter_mut().enumerate() {
             if let Some(id) = &episode.id {
-                if let Some(lbry_url) = &episode.lbry_url {
-                    episode
-                        .update_episode(id.to_owned(), lbry_url.to_owned(), i as u32, arkalis)
-                        .await?;
-                }
+                episode
+                    .update_episode(id.to_owned(), episode.lbry_url.to_owned(), i as u32, arkalis)
+                    .await?;
             } else {
                 episode
                     .create_episode(season_id, self.id.unwrap(), i as u32, arkalis)
