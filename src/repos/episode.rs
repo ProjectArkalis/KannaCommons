@@ -67,6 +67,7 @@ impl KannaEpisode {
             .into_inner()
             .episode
             .unwrap();
+        self.lbry_id = Some(ep.lbry_media_id);
         self.file_url = ep.file_name;
         Ok(self)
     }
